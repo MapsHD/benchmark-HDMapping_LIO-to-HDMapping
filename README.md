@@ -39,9 +39,9 @@ git clone https://github.com/MapsHD/benchmark-HDMapping_LIO-to-HDMapping --recur
 cd benchmark-HDMapping_LIO-to-HDMapping
 git checkout Bunker-DVI-Dataset-reg-1
 docker build -t hdmapping-lio .
-chmod +x docker_session_run-ros2-hdmapping-lio.sh
+chmod +x docker_session_run-hdmapping-lio.sh
 cd ~/hdmapping-benchmark/data/output_hdmapping
-~/hdmapping-benchmark/benchmark-HDMapping_LIO-to-HDMapping/docker_session_run-ros2-hdmapping-lio.sh converted_to_hdmapping .
+~/hdmapping-benchmark/benchmark-HDMapping_LIO-to-HDMapping/docker_session_run-hdmapping-lio.sh converted_to_hdmapping .
 ```
 
 Expected data should appear in ~/hdmapping-benchmark/data/output_hdmapping/output_hdmapping-hdmapping-lio.

@@ -23,7 +23,7 @@ RUN pip3 install cmake==4.0.3
 
 WORKDIR /opt
 
-# Build HDMapping (from local source with Linux fixes)
+# Build HDMapping
 COPY src/HDMapping /opt/HDMapping
 RUN cd HDMapping \
     && rm -rf build && mkdir -p build && cd build \
