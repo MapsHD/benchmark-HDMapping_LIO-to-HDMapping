@@ -1,0 +1,3 @@
+[submodule "src/HDMapping"]
+	path = src/HDMapping
+	url = https://github.com/MapsHD/HDMapping.git
