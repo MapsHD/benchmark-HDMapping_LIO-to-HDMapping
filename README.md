@@ -52,6 +52,10 @@ The same lidar odometry can also be run interactively in the HDMapping GUI, see 
 Expected data should appear in `~/hdmapping-benchmark/data/output_hdmapping-HDMapping_LIO`.
 Use tool [multi_view_tls_registration_step_2](https://github.com/MapsHD/HDMapping) to open `session.json` from `~/hdmapping-benchmark/data/output_hdmapping-HDMapping_LIO`.
 
+![HDMapping_LIO session opened in HDMapping multi_view_tls_registration_step_2](images/STEP_2__1.png)
+
+![HDMapping_LIO session in HDMapping multi_view_tls_registration_step_2 - second view](images/STEP_2__2.png)
+
 You should see the following data in folder `~/hdmapping-benchmark/data/output_hdmapping-HDMapping_LIO`:
 
 lio_initial_poses.reg
