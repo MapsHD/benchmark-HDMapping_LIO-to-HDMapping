@@ -142,17 +142,19 @@ docker run --rm \
     # HDMapping saves its session as session.mjs with session_poses.mrp and
     # session_ini_poses.mri. The benchmark, like every other algorithm's
     # output_hdmapping-* folder, uses session.json with poses.reg and
-    # lio_initial_poses.reg. The pose files have the same format, so they are
-    # copied, and session.json is session.mjs pointing at the standard names.
+    # lio_initial_poses.reg and nothing else: a second session file makes the
+    # later steps ambiguous. The pose files have the same format, so they are
+    # renamed, and session.json is session.mjs pointing at the standard names.
     cd /output/$OUTPUT_NAME
     if [[ -f session.json ]]; then
       echo '[session] session.json already written by HDMapping'
     elif [[ -f session.mjs ]]; then
-      cp session_poses.mrp poses.reg
-      cp session_ini_poses.mri lio_initial_poses.reg
+      mv session_poses.mrp poses.reg
+      mv session_ini_poses.mri lio_initial_poses.reg
       sed -e 's/session_poses\.mrp/poses.reg/g' -e 's/session_ini_poses\.mri/lio_initial_poses.reg/g' \
         session.mjs > session.json
-      echo '[session] session.json, poses.reg, lio_initial_poses.reg written from session.mjs'
+      rm session.mjs
+      echo '[session] session.mjs, session_poses.mrp, session_ini_poses.mri replaced by session.json, poses.reg, lio_initial_poses.reg'
     else
       echo 'ERROR: lidar_odometry_step_1 wrote neither session.json nor session.mjs'
       exit 1
