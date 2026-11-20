@@ -53,10 +53,8 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v4.0.0/cmake-4.0.0-l
     ./cmake-4.0.0-linux-x86_64.sh --prefix=/usr/local --skip-license && \
     rm cmake-4.0.0-linux-x86_64.sh
 
-# HDMapping version to benchmark: a branch, tag or commit. Pinned to a commit: with
-# a branch name Docker reuses the cached clone and silently keeps an old HDMapping.
-# Needs skip_first_file ([filter_points]), which docker_session_run-hdmapping-lio.sh sets.
-ARG HDMAPPING_REF=a411306b0f621755e49314573be6c24deaab8f10
+# HDMapping version to benchmark: a branch, tag or commit.
+ARG HDMAPPING_REF=main
 
 WORKDIR /workspace
 RUN git clone --recursive https://github.com/MapsHD/HDMapping.git && \

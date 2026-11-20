@@ -19,10 +19,7 @@
 #
 # Environment variables:
 #   PARAMS_FILE       - lidar odometry parameters (*.toml); default: HDMapping's
-#                       default parameters (lidar_odometry_step_1 --dump-default-params).
-#                       Either way skip_first_file is set to false: the benchmark
-#                       always starts from the first chunk (HDMapping's default drops
-#                       it, as on Mandeye data it is the device standing still).
+#                       default parameters (lidar_odometry_step_1 --dump-default-params)
 #   POINTCLOUD_TOPIC  - Livox point cloud topic in the bag (default: /livox/lidar)
 #   IMU_TOPIC         - IMU topic in the bag (default: /livox/imu)
 
@@ -121,9 +118,10 @@ fi
 echo "=== [2/2] Running HDMapping lidar odometry ==="
 rm -rf "$OUTPUT_HOST_DIR/$OUTPUT_NAME"
 PARAMS_MOUNT=()
-PARAMS_IN_CONTAINER=/tmp/lidar_odometry_params.toml
+PARAMS_IN_CONTAINER=/tmp/lidar_odometry_default_params.toml
 if [[ -n "$PARAMS_FILE" ]]; then
   PARAMS_MOUNT=(-v "$(realpath "$PARAMS_FILE")":/params/params.toml:ro)
+  PARAMS_IN_CONTAINER=/params/params.toml
 fi
 # The HDMapping-format input is mounted read-write: lidar_odometry_step_1
 # creates its chunk cache in <input folder>/cache.
@@ -135,20 +133,9 @@ docker run --rm \
   "$IMAGE_NAME" \
   /bin/bash -c "
     set -e
-    if [[ -f /params/params.toml ]]; then
-      cp /params/params.toml $PARAMS_IN_CONTAINER
-    else
+    if [[ ! -f $PARAMS_IN_CONTAINER ]]; then
       lidar_odometry_step_1 --dump-default-params $PARAMS_IN_CONTAINER
     fi
-    # Always start from the first chunk (see PARAMS_FILE above).
-    if grep -q '^skip_first_file *=' $PARAMS_IN_CONTAINER; then
-      sed -i 's/^skip_first_file *=.*/skip_first_file = false/' $PARAMS_IN_CONTAINER
-    elif grep -q '^\[filter_points\]' $PARAMS_IN_CONTAINER; then
-      sed -i '/^\[filter_points\]/a skip_first_file = false' $PARAMS_IN_CONTAINER
-    else
-      printf '\n[filter_points]\nskip_first_file = false\n' >> $PARAMS_IN_CONTAINER
-    fi
-    echo \"[params] \$(grep '^skip_first_file' $PARAMS_IN_CONTAINER)\"
     mkdir -p /output/$OUTPUT_NAME
     lidar_odometry_step_1 /input $PARAMS_IN_CONTAINER /output/$OUTPUT_NAME
 
